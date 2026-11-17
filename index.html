@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Guia interactiva: MER · DER · Base de Datos · Dia</title>
+<title>Guía interactiva: Diagrama DER · Modelo MER · Base de Datos</title>
 <style>
 :root{
   --verde:#0b6623; --verde-claro:#e8f5ec; --celeste:#d6eaf8;
@@ -115,24 +115,77 @@ ol.pasos{padding-left:1.4rem}
 ol.pasos li{margin-bottom:.45rem; font-size:.95rem}
 ol.pasos li strong{color:var(--verde)}
 @media (max-width:600px){ .conector{width:100%} }
+
+/* ---------- Actividades, autoevaluación y evaluación ---------- */
+.next-topic{
+  border:1px solid #9cc9a6; border-left:5px solid var(--verde);
+  background:var(--verde-claro); border-radius:10px;
+  padding:.8rem 1rem; margin:1rem 0;
+}
+.next-topic p{margin:.1rem 0 .6rem; font-size:.92rem}
+.btn{
+  display:inline-block; border:1px solid var(--verde); color:var(--verde);
+  background:#fff; border-radius:8px; padding:.45rem .8rem;
+  font-weight:600; font-size:.9rem; cursor:pointer; text-decoration:none;
+}
+.btn:hover{background:var(--verde-claro)}
+.btn-primary{background:var(--verde); color:#fff}
+.btn-primary:hover{background:#084e1b}
+.quiz-pregunta{
+  border:1px solid var(--borde); border-radius:10px;
+  padding:.7rem .9rem; margin:.7rem 0; background:#fdfdfd;
+}
+.quiz-pregunta p{margin:.1rem 0 .4rem}
+.quiz-pregunta label{display:block; font-size:.92rem; padding:.12rem 0; cursor:pointer}
+.feedback{font-size:.88rem; margin-top:.35rem; min-height:1.1em}
+.feedback.ok, .checklist .ok{color:#0b6623; font-weight:600}
+.feedback.mal, .checklist .mal{color:#b00020; font-weight:600}
+.puntaje{
+  font-weight:bold; color:var(--verde); background:var(--verde-claro);
+  border-radius:8px; padding:.5rem .8rem; margin:.8rem 0;
+}
+.paleta{
+  display:flex; flex-wrap:wrap; gap:.5rem; margin:.9rem 0;
+  padding:.7rem; background:var(--gris); border-radius:10px;
+}
+.paleta button{
+  display:inline-flex; align-items:center; gap:.3rem;
+  border:1px solid var(--borde); background:#fff; border-radius:8px;
+  padding:.3rem .5rem; font-size:.8rem; cursor:pointer;
+}
+.paleta button:hover{border-color:var(--verde); background:var(--verde-claro)}
+.paleta svg{width:26px; height:18px; flex:none}
+.eval-ej{
+  border:1px solid var(--borde); border-radius:10px;
+  padding:.8rem 1rem; margin:1rem 0; background:#fdfdfd;
+}
+.eval-ej h2{margin-top:.2rem}
+.eval-ej textarea{
+  width:100%; min-height:100px; box-sizing:border-box;
+  border:1px solid var(--borde); border-radius:8px; padding:.6rem;
+  font-family:inherit; font-size:.92rem; resize:vertical;
+}
+.checklist{font-size:.9rem; margin:.5rem 0}
+.checklist .fila{padding:.12rem 0}
 </style>
 </head>
 <body>
 
 <nav>
-  <span class="logo">Guia E-R</span>
-  <a href="#mer">MER</a>
-  <a href="#der">DER</a>
+  <span class="logo">Guía E-R</span>
+  <a href="#der">Diagrama DER</a>
+  <a href="#mer">Modelo MER</a>
   <a href="#bd">BD</a>
-  <a href="#dia">Dia</a>
-  <a href="#ejercicios">Ejercicios</a>
+  <a href="#actividades">Actividades</a>
+  <a href="#autoevaluacion">Autoevaluación</a>
+  <a href="#evaluacion">Evaluación</a>
 </nav>
 
 <main>
-<!-- ============================ MER ============================ -->
-<section id="mer">
-  <h1>Parte 1 &middot; MER: Modelo Entidad-Relacion</h1>
-  <p>El <strong>MER</strong> es una representacion <em>conceptual</em> de la base de datos:
+<!-- ======================= DIAGRAMA DER ======================== -->
+<section id="der">
+  <h1>Parte 1 &middot; Diagrama DER: símbolos del modelo E-R</h1>
+  <p>El <strong>Diagrama DER</strong> es una representacion <em>conceptual</em> de la base de datos:
   permite identificar entidades, atributos, relaciones y cardinalidades
   <strong>antes</strong> de escribir una sola linea de SQL. Caso de ejemplo de toda
   la guia: una <strong>tienda</strong> donde los clientes compran productos.</p>
@@ -239,7 +292,7 @@ ol.pasos li strong{color:var(--verde)}
       uno a muchos, muchos a muchos.</p>
     </div>
   </div>
-  <h2>Resumen de la simbologia</h2>
+  <h2>Resumen de la simbología del Diagrama DER</h2>
   <table class="datos">
     <tr><th>Simbolo</th><th>Representa</th></tr>
     <tr><td>Rectangulo</td><td>Entidad</td></tr>
@@ -251,9 +304,9 @@ ol.pasos li strong{color:var(--verde)}
     <tr><td>1:1 / 1:N / N:M</td><td>Cardinalidades sobre la linea</td></tr>
   </table>
 
-  <h2>Ejemplo completo de MER (vertical)</h2>
+  <h2>Ejemplo completo de Diagrama DER (vertical)</h2>
   <figure>
-      <svg viewBox="0 0 280 470" role="img" aria-label="MER completo de la tienda" style="max-width:300px">
+      <svg viewBox="0 0 280 470" role="img" aria-label="Diagrama DER completo de la tienda" style="max-width:300px">
         <ellipse cx="140" cy="18" rx="42" ry="13" fill="#f2f2f2" stroke="#000" stroke-width="1.3"/>
         <text x="140" y="22" text-anchor="middle" font-size="10.5">nombre</text>
         <line x1="140" y1="31" x2="140" y2="39" stroke="#000" stroke-width="1.3"/>
@@ -297,7 +350,7 @@ ol.pasos li strong{color:var(--verde)}
   </figure>
 
   <div class="ejercicio" data-ej="prac_mer">
-    <h2>Practica guiada: arm&aacute; tu primer MER</h2>
+    <h2>Practica guiada: arm&aacute; tu primer Diagrama DER</h2>
     <p><strong>Caso - La Pizzer&iacute;a:</strong> se registran los clientes
     (nombre, apellido y uno o m&aacute;s tel&eacute;fonos) y las pizzas
     (nombre, precio). Un cliente pide muchas pizzas y una pizza es pedida por
@@ -325,7 +378,7 @@ ol.pasos li strong{color:var(--verde)}
       relaciones <strong>1:N</strong> (cliente-pedido y pedido-pizza).</li>
     </ol>
     <details><summary>Ver c&oacute;mo quedar&iacute;a (comparalo al terminar)</summary>
-      <svg viewBox="0 0 320 510" role="img" aria-label="MER de la pizzeria" style="max-width:310px">
+      <svg viewBox="0 0 320 510" role="img" aria-label="Diagrama DER de la pizzeria" style="max-width:310px">
         <ellipse cx="120" cy="20" rx="52" ry="13" fill="#f2f2f2" stroke="#000" stroke-width="1.3"/>
         <text x="120" y="24" text-anchor="middle" font-size="10.5" text-decoration="underline">id_cliente</text>
         <line x1="120" y1="33" x2="120" y2="41" stroke="#000" stroke-width="1.3"/>
@@ -374,10 +427,10 @@ ol.pasos li strong{color:var(--verde)}
     </details>
   </div>
 </section>
-<!-- ============================ DER ============================ -->
-<section id="der">
-  <h1>Parte 2 &middot; DER: diagrama relacional</h1>
-  <p>El <strong>DER</strong> pasa del dibujo conceptual a las <strong>tablas</strong>
+<!-- ========================= MODELO MER ========================= -->
+<section id="mer">
+  <h1>Parte 2 &middot; Modelo MER: de las ideas a las tablas</h1>
+  <p>El <strong>Modelo MER</strong> pasa del dibujo conceptual a las <strong>tablas</strong>
   reales, como en MySQL Workbench: cada entidad se convierte en una caja con
   sus campos adentro, marcando quien es PK y quien FK. La entidad
   intermedia que nacio de la N:M (COMPRA) tambien es una tabla: contiene
@@ -421,15 +474,15 @@ producto_cod</div>
 
   <div class="nota">
     <strong>&iquest;Con que simbolo se dibuja la entidad intermedia?</strong>
-    En el DER se dibuja con el <strong>mismo simbolo que cualquier tabla</strong>.
+    En el Modelo MER se dibuja con el <strong>mismo simbolo que cualquier tabla</strong>.
     No tiene simbolo nuevo: la distinguen sus dos <strong>FOREIGN KEY</strong>
     (una hacia cada entidad que unia la N:M original) y sus atributos
-    convertidos en columnas. Suele heredar el nombre que traia del MER:
+    convertidos en columnas. Suele heredar el nombre que traia del Diagrama DER:
     la entidad COMPRA pasa a ser la tabla <code>compras</code>.
   </div>
 
-  <div class="ejercicio" data-ej="prac_der">
-    <h2>Practica guiada: pas&aacute; ese MER a DER</h2>
+  <div class="ejercicio" data-ej="prac_mer">
+    <h2>Practica guiada: pas&aacute; ese Diagrama DER al Modelo MER</h2>
     <p>Usando la pizzer&iacute;a del ejercicio anterior, convert&iacute; el diagrama a
     tablas. Segu&iacute; estos pasos:</p>
     <ol class="pasos">
@@ -439,7 +492,7 @@ producto_cod</div>
       <li><strong>Las claves &rarr; PRIMARY KEY:</strong> lo que estaba subrayado
       (id_cliente, id_pizza) ahora se marca como PK.</li>
       <li><strong>&iquest;C&oacute;mo era la relaci&oacute;n?</strong> PIDE era N:M: por eso
-      en el MER insertaste la entidad intermedia PEDIDO; en el DER ser&aacute;
+      en el Diagrama DER insertaste la entidad intermedia PEDIDO; en el Modelo MER ser&aacute;
       la tabla <code>pedidos</code>.</li>
       <li><strong>Dentro de la intermedia:</strong> su PK (id_pedido) y las dos
       FK (id_cliente hacia clientes, id_pizza hacia pizzas).</li>
@@ -451,7 +504,7 @@ producto_cod</div>
       <li><strong>Chequeo final:</strong> &iquest;quedan 3 tablas? &iquest;cada una
       tiene PK? &iquest;las dos FK de pedidos apuntan a PK existentes?</li>
     </ol>
-    <details><summary>Ver el DER que quedar&iacute;a</summary>
+    <details><summary>Ver el Modelo MER que quedar&iacute;a</summary>
       <div class="der-wrap">
         <div class="tblbox">
           <h4>clientes</h4>
@@ -581,54 +634,21 @@ JOIN productos p ON p.codigo = co.producto_codigo;</pre>
     <li>Prueba extra: insertar una compra con cliente_dni inexistente debe fallar; la FOREIGN KEY protege los datos.</li>
   </ul>
 </section>
-<!-- ============================ DIA ============================ -->
-<section id="dia">
-  <h1>Extra &middot; Dibujar con el programa Dia</h1>
-  <p><strong>Dia</strong> es un programa libre y gratuito para hacer
-  diagramas (alternativa a Visio). Sirve para pasar el MER y el DER a la
-  compu antes de entregarlos.</p>
-
-  <h2>Instalacion</h2>
-  <ul>
-    <li>Windows: bajar el instalador desde
-    <a href="https://dia-installer.de" target="_blank" rel="noopener">www.dia-installer.de</a>
-    (secci&oacute;n Download).</li>
-    <li>Linux: <code>sudo apt install dia</code></li>
-  </ul>
-
-  <h2>La pantalla</h2>
-  <ul>
-    <li><strong>Lienzo central:</strong> donde se arma el diagrama.</li>
-    <li><strong>Paleta izquierda:</strong> figuras de una coleccion llamada HOJA. El desplegable de arriba cambia de hoja.</li>
-    <li>Clic en una figura y luego clic en el lienzo para colocarla; doble clic para escribir su nombre.</li>
-  </ul>
-
-  <table class="datos">
-    <tr><th>Lo que queres dibujar</th><th>Hoja y figura en Dia</th></tr>
-    <tr><td>Entidad (rectangulo)</td><td>Hoja ER &rarr; Entity</td></tr>
-    <tr><td>Relacion (rombo)</td><td>Hoja ER &rarr; Relationship</td></tr>
-    <tr><td>Atributo (ovalo)</td><td>Hoja ER &rarr; Attribute</td></tr>
-    <tr><td>Tablas del DER (PK/FK)</td><td>Hoja Database &rarr; Table + Reference</td></tr>
-  </table>
-
-  <h2>Trucos</h2>
-  <ul>
-    <li>Unir figuras: herramienta LINEA desde un borde hasta otro; quedan pegadas y siguen unidas al moverlas.</li>
-    <li>Cardinalidades: herramienta TEXTO (T) y escribir 1:N o N:M junto a la linea.</li>
-    <li>En la tabla (hoja Database), doble clic abre el editor de columnas: nombre, tipo y tilde PRIMARY KEY.</li>
-    <li>Archivo &gt; Guardar deja el .dia editable; Archivo &gt; Exportar genera el PNG/PDF para entregar.</li>
-    <li>Atajos: Ctrl+rueda zoom, Ctrl+D duplicar, Supr borrar, Ctrl+Z deshacer.</li>
-  </ul>
-</section>
-<!-- ======================== EJERCICIOS ========================= -->
-<section id="ejercicios">
-  <h1>Parte 4 &middot; Ejercicios</h1>
-  <p>Resolv&eacute; cada ejercicio siguiendo siempre los mismos pasos:
-  <strong>a)</strong> MER en papel o con el programa Dia &middot;
-  <strong>b)</strong> DER con las tablas, PK y FK &middot;
+<!-- ======================= ACTIVIDADES ======================== -->
+<section id="actividades">
+  <h1>Parte 4 &middot; Actividades</h1>
+  <p>Resolv&eacute; cada actividad siguiendo siempre los mismos pasos:
+  <strong>a)</strong> Diagrama DER en papel, con los s&iacute;mbolos &middot;
+  <strong>b)</strong> Modelo MER con las tablas, PK y FK &middot;
   <strong>c)</strong> script <code>.sql</code> probado en phpMyAdmin o
   Workbench &middot; <strong>d)</strong> todo guardado en la carpeta con tu
   apellido.</p>
+
+  <div class="next-topic">
+    <p><strong>Actividades guiadas y autocorregibles</strong><br>
+    Practic&aacute; los mismos casos con ejercicios, quiz y simuladores en el curso interactivo.</p>
+    <a class="btn" href="https://miusuariohoy.github.io/modelos-y-sistemas-ejercicios/index.html" target="_blank" rel="noopener">Abrir actividades &rarr;</a>
+  </div>
 
   <div class="ejercicio">
     <h2>Ejercicio 1 - La Biblioteca</h2>
@@ -640,7 +660,7 @@ JOIN productos p ON p.codigo = co.producto_codigo;</pre>
     fecha_devolucion.</p>
     <p><em>Preguntas: cuantas entidades hay? Que relacion las une y con que
     cardinalidad? Donde aparece un atributo multivaluado?<br>
-    Entrega: MER + DER + BD</em></p>
+    Entrega: Diagrama DER + Modelo MER + BD</em></p>
   </div>
 
   <div class="ejercicio">
@@ -650,7 +670,7 @@ JOIN productos p ON p.codigo = co.producto_codigo;</pre>
     De cada MASCOTA: id_mascota (clave), nombre y especie. Un dueno TIENE
     muchas mascotas pero cada una pertenece a UN dueno (relacion 1:N).
     Pensa donde va la FK.</p>
-    <p><em>Entrega: MER + DER + BD</em></p>
+    <p><em>Entrega: Diagrama DER + Modelo MER + BD</em></p>
   </div>
 
   <div class="ejercicio">
@@ -660,7 +680,7 @@ JOIN productos p ON p.codigo = co.producto_codigo;</pre>
     (N:M): la entidad intermedia es CURSADA. De cada cursada:
     nota_1co y nota_2co; el promedio se calcula (derivado). Comparalo con
     tu base     bdescuela.</p>
-    <p><em>Entrega: MER + DER + BD</em></p>
+    <p><em>Entrega: Diagrama DER + Modelo MER + BD</em></p>
   </div>
 
   <div class="ejercicio">
@@ -677,16 +697,100 @@ JOIN productos p ON p.codigo = co.producto_codigo;</pre>
     cardinalidad tiene cada relaci&oacute;n? &iquest;D&oacute;nde
     ubicar&iacute;as la clave for&aacute;nea? &iquest;D&oacute;nde
     guardar&iacute;as la fecha de alta y el turno?<br>
-    Entrega: MER + DER + BD</em></p>
+    Entrega: Diagrama DER + Modelo MER + BD</em></p>
   </div>
 </section>
 
-<footer>Guia interactiva MER · DER · Base de Datos · Dia</footer>
+<footer>Gu&iacute;a interactiva &middot; Diagrama DER &middot; Modelo MER &middot; Base de Datos</footer>
+
+<!-- ======================= AUTOEVALUACIÓN ====================== -->
+<section id="autoevaluacion">
+  <h1>Parte 5 &middot; Autoevaluación</h1>
+  <p>Elegí una respuesta por pregunta y presioná <strong>Calificar</strong>. Podés repetirla las veces que necesites.</p>
+  <div id="quiz"></div>
+  <p>
+    <button class="btn btn-primary" type="button" onclick="calificarQuiz()">Calificar</button>
+    <button class="btn" type="button" onclick="reiniciarQuiz()">Reiniciar</button>
+  </p>
+  <div id="quiz-resultado" class="puntaje" aria-live="polite">Sin calificar.</div>
+</section>
+
+<!-- ========================= EVALUACIÓN ======================== -->
+<section id="evaluacion">
+  <h1>Parte 6 &middot; Evaluación con corrección</h1>
+  <p>Escribí tus respuestas y presioná <strong>Corregir</strong>. Los botones de símbolos insertan el término en el cuadro que estés usando. El corrector revisa la estructura, no reemplaza la corrección del docente.</p>
+
+  <div class="paleta" aria-label="Paleta de símbolos del Diagrama DER">
+    <button type="button" title="Rectángulo = entidad" onclick="insertarSimbolo('rectángulo (entidad)')">
+      <svg viewBox="0 0 28 20" aria-hidden="true"><rect x="2" y="3" width="24" height="14" fill="#d6eaf8" stroke="#000"/></svg>Rectángulo</button>
+    <button type="button" title="Rombo = relación" onclick="insertarSimbolo('rombo (relación)')">
+      <svg viewBox="0 0 28 20" aria-hidden="true"><polygon points="14,1 26,10 14,19 2,10" fill="#fcf3cf" stroke="#000"/></svg>Rombo</button>
+    <button type="button" title="Óvalo = atributo" onclick="insertarSimbolo('óvalo (atributo)')">
+      <svg viewBox="0 0 28 20" aria-hidden="true"><ellipse cx="14" cy="10" rx="11" ry="7" fill="#f2f2f2" stroke="#000"/></svg>Óvalo</button>
+    <button type="button" title="Óvalo subrayado = clave / PK" onclick="insertarSimbolo('óvalo subrayado (clave, PRIMARY KEY)')">
+      <svg viewBox="0 0 28 20" aria-hidden="true"><ellipse cx="14" cy="8" rx="11" ry="6" fill="#f2f2f2" stroke="#000"/><text x="14" y="11" text-anchor="middle" font-size="8" text-decoration="underline">id</text></svg>Óvalo clave</button>
+    <button type="button" title="Doble óvalo = atributo multivaluado" onclick="insertarSimbolo('doble óvalo (multivaluado)')">
+      <svg viewBox="0 0 28 20" aria-hidden="true"><ellipse cx="14" cy="10" rx="11" ry="7" fill="#f2f2f2" stroke="#000"/><ellipse cx="14" cy="10" rx="7" ry="4" fill="none" stroke="#000"/></svg>Doble óvalo</button>
+    <button type="button" title="Óvalo punteado = atributo derivado" onclick="insertarSimbolo('óvalo punteado (derivado)')">
+      <svg viewBox="0 0 28 20" aria-hidden="true"><ellipse cx="14" cy="10" rx="11" ry="7" fill="#f2f2f2" stroke="#000" stroke-dasharray="3 2"/></svg>Óvalo punteado</button>
+    <button type="button" title="Cardinalidad 1:N" onclick="insertarSimbolo('1:N (uno a muchos)')"><svg viewBox="0 0 28 20" aria-hidden="true"><text x="14" y="14" text-anchor="middle" font-size="11">1:N</text></svg>1:N</button>
+    <button type="button" title="Cardinalidad N:M" onclick="insertarSimbolo('N:M (muchos a muchos)')"><svg viewBox="0 0 28 20" aria-hidden="true"><text x="14" y="14" text-anchor="middle" font-size="11">N:M</text></svg>N:M</button>
+    <button type="button" title="Primary Key" onclick="insertarSimbolo('PK (PRIMARY KEY)')"><svg viewBox="0 0 28 20" aria-hidden="true"><text x="14" y="14" text-anchor="middle" font-size="11">PK</text></svg>PK</button>
+    <button type="button" title="Foreign Key" onclick="insertarSimbolo('FK (FOREIGN KEY)')"><svg viewBox="0 0 28 20" aria-hidden="true"><text x="14" y="14" text-anchor="middle" font-size="11">FK</text></svg>FK</button>
+  </div>
+
+  <div class="eval-ej">
+    <h2>1. Los símbolos del Diagrama DER</h2>
+    <p>Explicá qué símbolo se usa para la entidad, la relación y el atributo, y qué significa el óvalo subrayado.</p>
+    <textarea id="in-eval1" rows="5" placeholder="Escribí acá tu respuesta…"></textarea>
+    <p><button class="btn btn-primary" type="button" onclick="corregirEval('eval1')">Corregir</button>
+       <button class="btn" type="button" onclick="limpiarEval('eval1')">Limpiar</button></p>
+    <div id="res-eval1" class="checklist" aria-live="polite"></div>
+    <details><summary>Ver una respuesta posible</summary><p>La entidad se dibuja con un <strong>rectángulo</strong>, la relación con un <strong>rombo</strong> y el atributo con un <strong>óvalo</strong>. El óvalo subrayado marca la clave (PRIMARY KEY); el doble óvalo es multivaluado y el punteado, derivado.</p></details>
+  </div>
+
+  <div class="eval-ej">
+    <h2>2. De N:M al Modelo MER</h2>
+    <p>En la pizzería, PIDE es N:M. Explicá cómo se resuelve y qué tablas quedan en el Modelo MER.</p>
+    <textarea id="in-eval2" rows="5" placeholder="Escribí acá tu respuesta…"></textarea>
+    <p><button class="btn btn-primary" type="button" onclick="corregirEval('eval2')">Corregir</button>
+       <button class="btn" type="button" onclick="limpiarEval('eval2')">Limpiar</button></p>
+    <div id="res-eval2" class="checklist" aria-live="polite"></div>
+    <details><summary>Ver una respuesta posible</summary><p>Una relación N:M se rompe con una <strong>entidad intermedia</strong>, PEDIDO, que pasa a ser la tabla <code>pedidos</code>. Quedan tres tablas: <code>clientes</code>, <code>pizzas</code> y <code>pedidos</code>, con fecha y cantidad como columnas y dos FK hacia las claves de clientes y pizzas.</p></details>
+  </div>
+
+  <div class="eval-ej">
+    <h2>3. SQL de la tabla clientes</h2>
+    <p>Escribí el <code>CREATE TABLE clientes</code> con <code>dni</code> como PRIMARY KEY, <code>nombre VARCHAR(50) NOT NULL</code> y <code>telefono VARCHAR(20)</code>.</p>
+    <textarea id="in-eval3" rows="6" placeholder="CREATE TABLE …"></textarea>
+    <p><button class="btn btn-primary" type="button" onclick="corregirEval('eval3')">Corregir</button>
+       <button class="btn" type="button" onclick="limpiarEval('eval3')">Limpiar</button></p>
+    <div id="res-eval3" class="checklist" aria-live="polite"></div>
+    <details><summary>Ver una respuesta posible</summary><pre class="codigo">CREATE TABLE clientes (
+    dni INT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    telefono VARCHAR(20)
+);</pre></details>
+  </div>
+
+  <div class="eval-ej">
+    <h2>4. Diferencia entre Diagrama DER y Modelo MER</h2>
+    <p>Explicá la diferencia usando las palabras <strong>símbolos</strong>, <strong>tablas</strong>, <strong>PK</strong> y <strong>FK</strong>.</p>
+    <textarea id="in-eval4" rows="5" placeholder="Escribí acá tu respuesta…"></textarea>
+    <p><button class="btn btn-primary" type="button" onclick="corregirEval('eval4')">Corregir</button>
+       <button class="btn" type="button" onclick="limpiarEval('eval4')">Limpiar</button></p>
+    <div id="res-eval4" class="checklist" aria-live="polite"></div>
+    <details><summary>Ver una respuesta posible</summary><p>El <strong>Diagrama DER</strong> es el dibujo conceptual: usa símbolos (rectángulo, rombo y óvalos) y cardinalidades. El <strong>Modelo MER</strong> es el paso a las tablas: cada entidad se vuelve una tabla, la clave pasa a ser PK y las relaciones 1:N se representan con FK. Después recién se escribe el SQL de la BD.</p></details>
+  </div>
+
+  <div id="eval-progreso" class="puntaje" aria-live="polite">Evaluación sin corregir.</div>
+</section>
+
 </main>
 
 <script>
 /* Resalta el link activo de la barra al scrollear */
-const secciones = ["mer","der","bd","dia","ejercicios"];
+const secciones = ["der","mer","bd","actividades","autoevaluacion","evaluacion"];
 window.addEventListener("scroll", () => {
   let actual = secciones[0];
   secciones.forEach(s => {
@@ -696,6 +800,175 @@ window.addEventListener("scroll", () => {
   document.querySelectorAll("nav a").forEach(a =>
     a.classList.toggle("activo", a.getAttribute("href") === "#" + actual));
 });
+</script>
+
+<script>
+/* ---------- Autoevaluación: opción múltiple ---------- */
+const PREGUNTAS = [
+  { texto:'¿Qué símbolo representa una entidad en el Diagrama DER?',
+    opciones:['Rombo','Rectángulo','Óvalo'], correcta:1,
+    explicacion:'La entidad es un rectángulo con el nombre en mayúsculas.' },
+  { texto:'¿Qué símbolo representa una relación?',
+    opciones:['Rombo','Doble óvalo','Rectángulo'], correcta:0,
+    explicacion:'La relación (COMPRA, PIDE, CURSA) se dibuja como rombo.' },
+  { texto:'¿Cómo se dibuja el atributo clave?',
+    opciones:['Óvalo punteado','Óvalo doble','Óvalo subrayado'], correcta:2,
+    explicacion:'El óvalo subrayado identifica la clave; en la BD será PRIMARY KEY.' },
+  { texto:'¿Qué significa un doble óvalo?',
+    opciones:['Un atributo derivado','Un atributo con varios valores','Una entidad intermedia'], correcta:1,
+    explicacion:'El doble óvalo marca un atributo multivaluado, por ejemplo varios teléfonos.' },
+  { texto:'¿Cómo se resuelve una relación N:M?',
+    opciones:['Con una entidad intermedia y dos FK','Con un óvalo punteado','Borrando la cardinalidad'], correcta:0,
+    explicacion:'Se inserta una entidad intermedia (PEDIDO, PRESTAMO, CURSADA) que después es una tabla.' },
+  { texto:'En el Modelo MER, una FOREIGN KEY …',
+    opciones:['Numera las filas automáticamente','Es el nombre de la base','Apunta a la PRIMARY KEY de otra tabla'], correcta:2,
+    explicacion:'La FK une las tablas referenciando la PK de otra.' },
+  { texto:'¿Qué hace AUTO_INCREMENT?',
+    opciones:['Hace que MySQL numere solo','Crea un rombo','Borra los datos repetidos'], correcta:0,
+    explicacion:'AUTO_INCREMENT genera el valor siguiente para una clave entera.' },
+  { texto:'¿Qué cláusula cruza dos tablas en una consulta?',
+    opciones:['JOIN','WHERE','INSERT'], correcta:0,
+    explicacion:'JOIN relaciona tablas mediante una condición, por ejemplo ON c.dni = co.cliente_dni.' }
+];
+
+function dibujarQuiz(){
+  const caja = document.getElementById('quiz');
+  if(!caja) return;
+  caja.innerHTML = PREGUNTAS.map(function(p, i){
+    return '<div class="quiz-pregunta"><p><strong>' + (i + 1) + '. ' + p.texto + '</strong></p>' +
+      p.opciones.map(function(o, j){
+        return '<label><input type="radio" name="q' + i + '" value="' + j + '"> ' + o + '</label>';
+      }).join('') + '<div class="feedback" id="fb-q' + i + '"></div></div>';
+  }).join('');
+}
+
+function calificarQuiz(){
+  let aciertos = 0;
+  PREGUNTAS.forEach(function(p, i){
+    const elegida = document.querySelector('input[name="q' + i + '"]:checked');
+    const fb = document.getElementById('fb-q' + i);
+    if(!elegida){
+      fb.className = 'feedback mal';
+      fb.textContent = 'Sin responder. La correcta es: ' + p.opciones[p.correcta];
+      return;
+    }
+    const ok = Number(elegida.value) === p.correcta;
+    if(ok) aciertos++;
+    fb.className = 'feedback ' + (ok ? 'ok' : 'mal');
+    fb.textContent = (ok ? '✔ Correcto. ' : '✘ La correcta es: ' + p.opciones[p.correcta] + '. ') + p.explicacion;
+  });
+  const resultado = document.getElementById('quiz-resultado');
+  resultado.textContent = 'Resultado: ' + aciertos + ' de ' + PREGUNTAS.length +
+    ' (' + Math.round(aciertos / PREGUNTAS.length * 100) + '%)';
+  resultado.className = 'puntaje' + (aciertos === PREGUNTAS.length ? ' ok' : '');
+}
+
+function reiniciarQuiz(){
+  document.querySelectorAll('#quiz input[type="radio"]').forEach(function(i){ i.checked = false; });
+  document.querySelectorAll('#quiz .feedback').forEach(function(f){ f.textContent = ''; f.className = 'feedback'; });
+  const resultado = document.getElementById('quiz-resultado');
+  resultado.textContent = 'Sin calificar.';
+  resultado.className = 'puntaje';
+}
+
+/* ---------- Evaluación: corrección de respuestas escritas ---------- */
+function normalizar(texto){
+  return String(texto || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/▭▬■□◻/g, ' rectangulo ')
+    .replace(/◇◆♦/g, ' rombo ')
+    .replace(/⬭⬮○◯/g, ' ovalo ')
+    .replace(/[^a-z0-9\s():,.\-]/g, ' ')
+    .replace(/\s+/g, ' ').trim();
+}
+
+const CORRECCIONES = {
+  eval1: { requisitos:[
+    { d:'Usás rectángulo para la entidad', f:c=>/rectangulo/.test(c) && /entidad/.test(c) },
+    { d:'Usás rombo para la relación', f:c=>/rombo/.test(c) && /relacion/.test(c) },
+    { d:'Usás óvalo para el atributo', f:c=>/ovalo/.test(c) && /atributo/.test(c) },
+    { d:'Explicás el óvalo subrayado como clave / PK', f:c=>/ovalo subrayado/.test(c) && /(clave|primary key|pk)/.test(c) }
+  ]},
+  eval2: { requisitos:[
+    { d:'Identificás la cardinalidad N:M', f:c=>/n\s*:\s*m/.test(c) },
+    { d:'Mencionás la entidad intermedia', f:c=>/entidad intermedia/.test(c) },
+    { d:'Nombrás la tabla pedidos / PEDIDO', f:c=>/pedid/.test(c) },
+    { d:'Mencionás las dos FK', f:c=>/(fk|foreign key|clave foranea)/.test(c) && /(dos|2)/.test(c) }
+  ]},
+  eval3: { requisitos:[
+    { d:'Escribís CREATE TABLE clientes', f:c=>/create table clientes/.test(c) },
+    { d:'Definís dni como PRIMARY KEY', f:c=>/dni/.test(c) && /primary key/.test(c) },
+    { d:'Definís nombre VARCHAR(50) NOT NULL', f:c=>/nombre varchar\(50\) not null/.test(c) },
+    { d:'Definís telefono VARCHAR(20)', f:c=>/telefono varchar\(20\)/.test(c) }
+  ]},
+  eval4: { requisitos:[
+    { d:'Hablas de los símbolos del Diagrama DER', f:c=>/simbol/.test(c) && /(rectangulo|rombo|ovalo|der)/.test(c) },
+    { d:'Hablas de las tablas del Modelo MER', f:c=>/tabla/.test(c) && /(mer|modelo)/.test(c) },
+    { d:'Mencionás PK', f:c=>/\bpk\b|primary key/.test(c) },
+    { d:'Mencionás FK', f:c=>/\bfk\b|foreign key/.test(c) }
+  ]}
+};
+
+let ultimoTextarea = null;
+document.addEventListener('focusin', function(e){
+  if(e.target && e.target.tagName === 'TEXTAREA') ultimoTextarea = e.target;
+});
+
+function insertarSimbolo(texto){
+  const area = (ultimoTextarea && document.body.contains(ultimoTextarea))
+    ? ultimoTextarea : document.getElementById('in-eval1');
+  if(!area) return;
+  const ini = area.selectionStart, fin = area.selectionEnd;
+  area.value = area.value.slice(0, ini) + texto + area.value.slice(fin);
+  area.focus();
+  area.selectionStart = area.selectionEnd = ini + texto.length;
+}
+
+function corregirEval(id){
+  const area = document.getElementById('in-' + id);
+  const salida = document.getElementById('res-' + id);
+  const datos = CORRECCIONES[id];
+  if(!area || !salida || !datos) return;
+  const texto = normalizar(area.value);
+  let bien = 0;
+  const filas = datos.requisitos.map(function(r){
+    const pasa = r.f(texto);
+    if(pasa) bien++;
+    return '<div class="fila ' + (pasa ? 'ok' : 'mal') + '">' + (pasa ? '✔' : '✘') + ' ' + r.d + '</div>';
+  }).join('');
+  const total = datos.requisitos.length;
+  salida.innerHTML = filas + '<div class="puntaje">' + bien + ' de ' + total +
+    ' requisitos (' + Math.round(bien / total * 100) + '%)</div>' +
+    '<p class="nota">El corrector revisa la estructura de la respuesta, no su redacción.</p>';
+  actualizarProgreso();
+}
+
+function limpiarEval(id){
+  const area = document.getElementById('in-' + id);
+  const salida = document.getElementById('res-' + id);
+  if(area) area.value = '';
+  if(salida) salida.innerHTML = '';
+  actualizarProgreso();
+}
+
+function actualizarProgreso(){
+  const salida = document.getElementById('eval-progreso');
+  if(!salida) return;
+  const valores = Object.keys(CORRECCIONES).map(function(id){
+    const c = document.getElementById('res-' + id);
+    if(!c || !c.querySelector('.puntaje')) return null;
+    const m = c.querySelector('.puntaje').textContent.match(/(\d+) de (\d+)/);
+    return m ? { bien:Number(m[1]), total:Number(m[2]) } : null;
+  }).filter(Boolean);
+  if(!valores.length){ salida.textContent = 'Evaluación sin corregir.'; return; }
+  const bien = valores.reduce(function(s, v){ return s + v.bien; }, 0);
+  const total = valores.reduce(function(s, v){ return s + v.total; }, 0);
+  salida.textContent = 'Progreso de la evaluación: ' + bien + ' de ' + total +
+    ' requisitos (' + Math.round(bien / total * 100) + '%)';
+}
+
+dibujarQuiz();
 </script>
 </body>
 </html>
