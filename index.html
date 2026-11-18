@@ -540,99 +540,308 @@ id_pizza</div>
 </section>
 <!-- ============================ BD ============================ -->
 <section id="bd">
-  <h1>Parte 3 &middot; BD: creacion en MySQL</h1>
+  <h1>Parte 3 &middot; BD: creación y consultas en MySQL</h1>
 
-  <h2>Paso 1: crear la base de datos</h2>
-  <p>Una base de datos es la carpeta logica que agrupa las tablas del
-  sistema. Se crea una sola vez; <code>USE</code> indica con cual trabajamos:</p>
+  <p>En esta parte primero creamos la base, las tablas y cargamos datos. Después
+  aparecen todos los temas de <code>SELECT</code>, numerados una sola vez. El
+  recorrido termina con la relación entre tablas y las consultas de dos o más
+  tablas.</p>
+
+  <h2>1. Crear la base de datos</h2>
+  <p>Una base de datos es la carpeta lógica que agrupa las tablas. Se crea una
+  sola vez. <code>IF NOT EXISTS</code> evita un error si ya existe y
+  <code>USE</code> indica con cuál vamos a trabajar:</p>
 <pre class="codigo"><span class="cm">-- Crea la base (si no existe) y entra en ella</span>
 <span class="kw">CREATE DATABASE</span> IF NOT EXISTS tiendita;
 <span class="kw">USE</span> tiendita;</pre>
 
-  <h2>Paso 2: crear una tabla</h2>
-  <p>Cada entidad del diagrama se convierte en una tabla. Entre parentesis
-  se listan las columnas: <strong>NOMBRE, TIPO y restricciones</strong>,
-  separadas por comas (la ultima sin coma):</p>
+  <h2>2. Crear tablas</h2>
+  <p>Cada entidad del diagrama se convierte en una tabla. Entre paréntesis se
+  escriben las columnas con <strong>nombre, tipo y restricciones</strong>,
+  separadas por comas (la última sin coma):</p>
 <pre class="codigo"><span class="kw">CREATE TABLE</span> clientes (
-    dni     INT,
-    nombre  VARCHAR(50),
-    precio  DECIMAL(10,2),
-    fecha   DATE,
-    <span class="kw">PRIMARY KEY</span> (dni)
+    dni       INT PRIMARY KEY,
+    nombre    VARCHAR(50) NOT NULL,
+    apellido  VARCHAR(50) NOT NULL,
+    telefono  VARCHAR(20)
+);
+
+<span class="kw">CREATE TABLE</span> productos (
+    codigo    INT AUTO_INCREMENT PRIMARY KEY,
+    nombre    VARCHAR(50) NOT NULL,
+    categoria VARCHAR(30),
+    precio    DECIMAL(10,2) NOT NULL,
+    stock     INT NOT NULL DEFAULT 0
+);
+
+<span class="cm">-- Tabla intermedia: resuelve la relación N:M cliente-producto</span>
+<span class="kw">CREATE TABLE</span> compras (
+    id_compra        INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_dni      INT NOT NULL,
+    producto_codigo  INT NOT NULL,
+    fecha            DATE NOT NULL,
+    cantidad         INT NOT NULL,
+    <span class="kw">FOREIGN KEY</span> (cliente_dni)     <span class="kw">REFERENCES</span> clientes(dni),
+    <span class="kw">FOREIGN KEY</span> (producto_codigo) <span class="kw">REFERENCES</span> productos(codigo)
 );</pre>
 
   <table class="datos">
-    <tr><th>Tipo</th><th>Para que sirve</th><th>Ejemplo</th></tr>
-    <tr><td>INT</td><td>Numeros enteros</td><td>dni, stock, cantidad</td></tr>
-    <tr><td>DECIMAL(10,2)</td><td>Decimales exactos</td><td>precio</td></tr>
-    <tr><td>VARCHAR(n)</td><td>Texto corto variable</td><td>nombre, telefono</td></tr>
-    <tr><td>DATE</td><td>Fecha AAAA-MM-DD</td><td>fecha_nacimiento</td></tr>
-    <tr><td>AUTO_INCREMENT</td><td>MySQL numera solo</td><td>id_compra</td></tr>
+    <tr><th>Tipo o restricción</th><th>Para qué sirve</th><th>Ejemplo</th></tr>
+    <tr><td>INT</td><td>Números enteros</td><td>dni, stock, cantidad</td></tr>
+    <tr><td>VARCHAR(n)</td><td>Texto corto variable</td><td>nombre, apellido, teléfono</td></tr>
+    <tr><td>DECIMAL(10,2)</td><td>Decimales exactos con 2 decimales</td><td>precio</td></tr>
+    <tr><td>DATE</td><td>Fecha AAAA-MM-DD</td><td>fecha</td></tr>
+    <tr><td>PRIMARY KEY</td><td>Identifica cada fila sin repetirse</td><td>dni, codigo, id_compra</td></tr>
+    <tr><td>NOT NULL</td><td>Obliga a cargar ese dato</td><td>nombre, precio</td></tr>
+    <tr><td>DEFAULT</td><td>Valor si no se indica nada</td><td>stock DEFAULT 0</td></tr>
+    <tr><td>AUTO_INCREMENT</td><td>MySQL numera automáticamente</td><td>codigo, id_compra</td></tr>
+    <tr><td>FOREIGN KEY ... REFERENCES</td><td>Conecta con la PK de otra tabla</td><td>cliente_dni → clientes.dni</td></tr>
   </table>
 
-  <ul>
-    <li><code>PRIMARY KEY</code>: identifica cada fila.</li>
-    <li><code>NOT NULL</code>: obliga a cargar siempre ese dato.</li>
-    <li><code>FOREIGN KEY ... REFERENCES</code>: conecta con la PK de otra tabla.</li>
-  </ul>
-  <h2>Script completo: base TIENDITA</h2>
-  <p>Guardalo como <code>tiendita.sql</code>: crea la base, las tres tablas,
-  carga datos de prueba y arma la boleta con un JOIN.</p>
-<pre class="codigo">CREATE DATABASE IF NOT EXISTS tiendita;
-USE tiendita;
-
-CREATE TABLE clientes (
-    dni INT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    apellido VARCHAR(50) NOT NULL,
-    telefono VARCHAR(20)
-);
-
-CREATE TABLE productos (
-    codigo INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    precio DECIMAL(10,2) NOT NULL,
-    stock INT NOT NULL DEFAULT 0
-);
-
--- Entidad intermedia COMPRA (resuelve la N:M) -&gt; tabla compras
-CREATE TABLE compras (
-    id_compra INT AUTO_INCREMENT PRIMARY KEY,
-    cliente_dni INT NOT NULL,
-    producto_codigo INT NOT NULL,
-    fecha DATE NOT NULL,
-    cantidad INT NOT NULL,
-    FOREIGN KEY (cliente_dni) REFERENCES clientes(dni),
-    FOREIGN KEY (producto_codigo) REFERENCES productos(codigo)
-);
-
-INSERT INTO clientes VALUES
+  <h2>3. Insertar datos</h2>
+  <p><code>INSERT INTO ... VALUES</code> agrega filas. Conviene escribir entre
+  paréntesis los nombres de las columnas: así el orden de los valores queda
+  claro y las columnas <code>AUTO_INCREMENT</code> se omiten. Los textos van
+  entre comillas simples y las fechas como <code>'AAAA-MM-DD'</code>:</p>
+<pre class="codigo"><span class="kw">INSERT INTO</span> clientes (dni, nombre, apellido, telefono) <span class="kw">VALUES</span>
     (30111222, 'Ana',  'Gomez', '2664-111111'),
     (28333444, 'Luis', 'Perez', '2664-222222');
 
-INSERT INTO productos (nombre, precio, stock) VALUES
-    ('Teclado', 8500.00, 10),
-    ('Mouse',   4200.50, 15);
+<span class="kw">INSERT INTO</span> productos (nombre, categoria, precio, stock) <span class="kw">VALUES</span>
+    ('Teclado', 'Tecnologia', 8500.00, 10),
+    ('Mouse',   'Tecnologia', 4200.50, 15),
+    ('Silla',   'Muebles',   12000.00,  4);
 
-INSERT INTO compras (cliente_dni, producto_codigo, fecha, cantidad) VALUES
+<span class="kw">INSERT INTO</span> compras (cliente_dni, producto_codigo, fecha, cantidad) <span class="kw">VALUES</span>
     (30111222, 1, '2026-08-20', 2),
     (30111222, 2, '2026-08-21', 1),
-    (28333444, 1, '2026-08-21', 3);
+    (28333444, 1, '2026-08-21', 3);</pre>
 
-SELECT c.apellido, p.nombre, co.fecha, co.cantidad,
-       p.precio * co.cantidad AS total
-FROM compras co
-JOIN clientes  c ON c.dni    = co.cliente_dni
-JOIN productos p ON p.codigo = co.producto_codigo;</pre>
-
-  <h2>Como probarlo</h2>
+  <h2>4. SELECT: lectura básica y selección de columnas</h2>
+  <p><code>SELECT</code> lee datos y no modifica la tabla. Es la sentencia más
+  usada.</p>
   <ul>
-    <li>Abrir phpMyAdmin o MySQL Workbench.</li>
-    <li>Pegar el script completo y ejecutarlo.</li>
-    <li>Verificar las tablas clientes, productos y compras.</li>
-    <li>Ejecutar solo el SELECT final: muestra la boleta con el total.</li>
-    <li>Prueba extra: insertar una compra con cliente_dni inexistente debe fallar; la FOREIGN KEY protege los datos.</li>
+    <li><strong>Traer todo:</strong> <code>SELECT * FROM clientes;</code> devuelve todas las columnas y filas.</li>
+    <li><strong>Elegir columnas:</strong> <code>SELECT nombre, email FROM clientes;</code> trae solo lo pedido.</li>
+    <li><strong>Quitar duplicados:</strong> <code>SELECT DISTINCT ciudad FROM clientes;</code> muestra cada valor una vez.</li>
+    <li><strong>Renombrar con alias:</strong> <code>SELECT nombre AS cliente FROM clientes;</code> cambia el nombre de la columna en el resultado.</li>
   </ul>
+<pre class="codigo"><span class="kw">SELECT</span> DISTINCT categoria <span class="kw">AS</span> rubro
+<span class="kw">FROM</span> productos;</pre>
+
+  <h2>5. Filtrado y ordenamiento</h2>
+  <p><code>WHERE</code> filtra filas, <code>ORDER BY</code> las ordena y
+  <code>LIMIT</code> recorta la salida.</p>
+  <ul>
+    <li><strong>Operadores:</strong> <code>=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&lt;&gt;</code>, <code>LIKE</code>, <code>IN</code> y <code>BETWEEN</code>.</li>
+    <li><strong>Orden:</strong> <code>ASC</code> ascendente (por defecto) y <code>DESC</code> descendente.</li>
+    <li><strong>Cantidad:</strong> <code>LIMIT</code> es de MySQL/PostgreSQL; en SQL Server se usa <code>TOP</code>.</li>
+  </ul>
+<pre class="codigo"><span class="kw">SELECT</span> nombre, precio
+<span class="kw">FROM</span> productos
+<span class="kw">WHERE</span> precio &gt; 1000;
+
+<span class="kw">SELECT</span> *
+<span class="kw">FROM</span> productos
+<span class="kw">WHERE</span> precio <span class="kw">BETWEEN</span> 1000 <span class="kw">AND</span> 5000
+  <span class="kw">AND</span> categoria <span class="kw">IN</span> ('Tecnologia', 'Muebles')
+<span class="kw">ORDER BY</span> precio <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> 10;
+
+<span class="cm">-- SQL Server equivalente al LIMIT anterior</span>
+<span class="cm">-- SELECT TOP 10 * FROM productos ORDER BY precio DESC;</span></pre>
+
+  <div class="nota"><strong>Orden de las cláusulas.</strong> Para escribir una
+  consulta se usa: <code>SELECT → FROM → JOIN/ON → WHERE → GROUP BY → HAVING →
+  ORDER BY → LIMIT</code>. El orden lógico en que la base la procesa es
+  <code>FROM/JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT</code>.
+  Por eso <code>WHERE</code> no puede filtrar con un alias creado en
+  <code>SELECT</code>.</div>
+
+  <h2>6. Cálculos y agrupación de datos</h2>
+  <p>Las funciones de agregación resumen varias filas en un solo valor:</p>
+  <ul>
+    <li><code>COUNT()</code> cuenta filas, <code>SUM()</code> suma, <code>AVG()</code> promedia.</li>
+    <li><code>MIN()</code> y <code>MAX()</code> devuelven el menor y el mayor valor.</li>
+    <li><code>GROUP BY</code> arma grupos; <code>HAVING</code> filtra esos grupos ya calculados.</li>
+  </ul>
+<pre class="codigo"><span class="kw">SELECT</span> <span class="kw">COUNT</span>(*) <span class="kw">AS</span> total_compras,
+       <span class="kw">SUM</span>(cantidad) <span class="kw">AS</span> unidades,
+       <span class="kw">AVG</span>(cantidad) <span class="kw">AS</span> promedio,
+       <span class="kw">MIN</span>(cantidad) <span class="kw">AS</span> menor,
+       <span class="kw">MAX</span>(cantidad) <span class="kw">AS</span> mayor
+<span class="kw">FROM</span> compras;
+
+<span class="kw">SELECT</span> categoria, <span class="kw">SUM</span>(stock) <span class="kw">AS</span> stock_por_rubro
+<span class="kw">FROM</span> productos
+<span class="kw">GROUP BY</span> categoria;
+
+<span class="kw">SELECT</span> categoria, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> cantidad
+<span class="kw">FROM</span> productos
+<span class="kw">GROUP BY</span> categoria
+<span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt; 1;</pre>
+
+  <h2>7. Paginación y límites (LIMIT y OFFSET)</h2>
+  <ul>
+    <li><strong>Primeros N:</strong> <code>SELECT * FROM usuarios LIMIT 5;</code></li>
+    <li><strong>Saltar filas:</strong> <code>LIMIT 10 OFFSET 20</code> salta 20 y muestra 10; sirve para páginas web.</li>
+    <li>Conviene acompañar siempre con <code>ORDER BY</code> para que la paginación sea estable.</li>
+  </ul>
+<pre class="codigo"><span class="kw">SELECT</span> nombre, precio
+<span class="kw">FROM</span> productos
+<span class="kw">ORDER BY</span> codigo
+<span class="kw">LIMIT</span> 10 <span class="kw">OFFSET</span> 20;
+
+<span class="cm">-- SQL Server: ORDER BY codigo OFFSET 20 ROWS FETCH NEXT 10 ROWS ONLY</span></pre>
+
+  <h2>8. Búsqueda de texto y patrones</h2>
+  <ul>
+    <li><code>LIKE</code> usa <code>%</code> (cualquier texto) y <code>_</code> (un carácter). En MySQL la distinción de mayúsculas depende de la <em>collation</em> de la columna; por defecto suele no distinguirlas.</li>
+    <li><code>REGEXP</code> busca patrones complejos. En MySQL 8 también aparece como <code>REGEXP_LIKE()</code>.</li>
+    <li><code>MATCH() ... AGAINST()</code> es búsqueda de texto completo y necesita un índice <code>FULLTEXT</code>.</li>
+  </ul>
+<pre class="codigo"><span class="kw">SELECT</span> * <span class="kw">FROM</span> clientes <span class="kw">WHERE</span> nombre <span class="kw">LIKE</span> '%garcia%';
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> clientes <span class="kw">WHERE</span> nombre <span class="kw">LIKE</span> '_ana';
+
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> productos
+<span class="kw">WHERE</span> codigo <span class="kw">REGEXP</span> '^[A-Z]{2}[0-9]+$';
+
+<span class="cm">-- Requiere: CREATE FULLTEXT INDEX ft_clientes ON clientes (nombre, apellido);</span>
+<span class="kw">SELECT</span> nombre, apellido
+<span class="kw">FROM</span> clientes
+<span class="kw">WHERE</span> <span class="kw">MATCH</span>(nombre, apellido) <span class="kw">AGAINST</span> ('ana gomez');</pre>
+
+  <h2>9. Manejo de fechas y horas</h2>
+  <ul>
+    <li><code>NOW()</code> devuelve fecha y hora actual; <code>CURDATE()</code> solo la fecha. Se puede hacer <code>SELECT</code> sin tabla.</li>
+    <li><code>YEAR()</code>, <code>MONTH()</code> y <code>DATEDIFF()</code> ayudan a filtrar rangos.</li>
+    <li><code>DATE_FORMAT()</code> cambia la forma en que se muestra la fecha.</li>
+  </ul>
+<pre class="codigo"><span class="kw">SELECT</span> <span class="kw">NOW</span>() <span class="kw">AS</span> fecha_hora, <span class="kw">CURDATE</span>() <span class="kw">AS</span> hoy;
+
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> compras
+<span class="kw">WHERE</span> <span class="kw">YEAR</span>(fecha) = 2026 <span class="kw">AND</span> <span class="kw">MONTH</span>(fecha) = 11;
+
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> compras
+<span class="kw">WHERE</span> <span class="kw">DATEDIFF</span>(<span class="kw">CURDATE</span>(), fecha) &lt;= 30;
+
+<span class="kw">SELECT</span> <span class="kw">DATE_FORMAT</span>(fecha, '%d/%m/%Y') <span class="kw">AS</span> fecha_arg
+<span class="kw">FROM</span> compras;</pre>
+
+  <h2>10. Lógica condicional en los resultados</h2>
+  <ul>
+    <li><code>IF()</code> evalúa una condición simple (propio de MySQL).</li>
+    <li><code>CASE WHEN ... THEN ... ELSE ... END</code> arma categorías con varias condiciones y es más portable.</li>
+    <li><code>IFNULL()</code> y <code>COALESCE()</code> reemplazan valores <code>NULL</code> por un texto por defecto.</li>
+  </ul>
+<pre class="codigo"><span class="kw">SELECT</span> nombre, <span class="kw">IF</span>(stock &gt; 0, 'Disponible', 'Sin stock') <span class="kw">AS</span> estado
+<span class="kw">FROM</span> productos;
+
+<span class="kw">SELECT</span> cantidad,
+       <span class="kw">CASE</span> <span class="kw">WHEN</span> cantidad &gt; 2 <span class="kw">THEN</span> 'Compra grande'
+            <span class="kw">ELSE</span> 'Compra chica' <span class="kw">END</span> <span class="kw">AS</span> tipo
+<span class="kw">FROM</span> compras;
+
+<span class="kw">SELECT</span> nombre, <span class="kw">IFNULL</span>(telefono, 'Sin teléfono') <span class="kw">AS</span> tel
+<span class="kw">FROM</span> clientes;
+
+<span class="kw">SELECT</span> nombre, <span class="kw">COALESCE</span>(telefono, 'Sin teléfono') <span class="kw">AS</span> tel
+<span class="kw">FROM</span> clientes;</pre>
+
+  <h2>11. Concatenación y funciones de texto</h2>
+  <ul>
+    <li><code>CONCAT()</code> junta textos; <code>CONCAT_WS()</code> usa un separador.</li>
+    <li><code>GROUP_CONCAT()</code> junta varios valores de un grupo en una sola fila (MySQL).</li>
+  </ul>
+<pre class="codigo"><span class="kw">SELECT</span> <span class="kw">CONCAT</span>(nombre, ' ', apellido) <span class="kw">AS</span> nombre_completo
+<span class="kw">FROM</span> clientes;
+
+<span class="kw">SELECT</span> <span class="kw">CONCAT_WS</span>(' - ', nombre, apellido, telefono) <span class="kw">AS</span> ficha
+<span class="kw">FROM</span> clientes;
+
+<span class="kw">SELECT</span> cliente_dni,
+       <span class="kw">GROUP_CONCAT</span>(producto_codigo <span class="kw">ORDER BY</span> producto_codigo <span class="kw">SEPARATOR</span> ', ') <span class="kw">AS</span> productos
+<span class="kw">FROM</span> compras
+<span class="kw">GROUP BY</span> cliente_dni;</pre>
+
+  <h2>12. Relacionar dos tablas: de PK a FK (explicación y ejemplo)</h2>
+  <p>La <strong>PK</strong> (<em>Primary Key</em>) identifica cada fila de una
+  tabla. La <strong>FK</strong> (<em>Foreign Key</em>) es una columna de otra
+  tabla que guarda el valor de esa PK. Así se arma una relación 1:N: un
+  cliente puede tener muchas compras, pero cada compra pertenece a un solo
+  cliente.</p>
+<pre class="codigo">clientes.dni  (PK)  <span class="cm">←</span>  compras.cliente_dni  (FK)
+productos.codigo (PK) <span class="cm">←</span>  compras.producto_codigo (FK)</pre>
+  <p>En la tabla <code>compras</code>, <code>cliente_dni</code> no es un dato
+  suelto: copia el <code>dni</code> de un cliente existente. La restricción
+  <code>FOREIGN KEY ... REFERENCES</code> impide cargar una compra con un
+  cliente que no existe. Lo mismo pasa con <code>producto_codigo</code> y
+  <code>productos.codigo</code>.</p>
+  <p><strong>Ejemplo con dos tablas:</strong> cruzamos <code>clientes</code> y
+  <code>compras</code> usando <code>c</code> y <code>co</code> como alias de
+  tabla:</p>
+<pre class="codigo"><span class="kw">SELECT</span> c.nombre, c.apellido, co.fecha, co.cantidad
+<span class="kw">FROM</span> clientes c
+<span class="kw">JOIN</span> compras co <span class="kw">ON</span> co.cliente_dni = c.dni;</pre>
+  <p>La condición <code>ON co.cliente_dni = c.dni</code> es la que empareja la
+  FK con la PK. Sin ella, la base no sabría qué compra va con qué cliente.</p>
+
+  <h2>13. Consultas de dos o más tablas</h2>
+  <p>Cuando la información está repartida en varias tablas se usa <code>JOIN</code>.
+  Siempre se apoya en una PK y una FK.</p>
+  <table class="datos">
+    <tr><th>Tipo</th><th>Qué devuelve</th></tr>
+    <tr><td>INNER JOIN (o solo JOIN)</td><td>Solo filas que coinciden en ambas tablas.</td></tr>
+    <tr><td>LEFT JOIN</td><td>Todas las filas de la izquierda, aunque no tengan coincidencia a la derecha.</td></tr>
+    <tr><td>RIGHT JOIN</td><td>Todas las filas de la derecha, aunque no tengan coincidencia a la izquierda.</td></tr>
+    <tr><td>CROSS JOIN</td><td>Combinación de todas con todas (producto cartesiano).</td></tr>
+    <tr><td>FULL OUTER JOIN</td><td>No existe directo en MySQL: se simula con LEFT + RIGHT unidos por UNION.</td></tr>
+  </table>
+<pre class="codigo"><span class="cm">-- Tres tablas: boleta de compras</span>
+<span class="kw">SELECT</span> c.apellido, p.nombre <span class="kw">AS</span> producto, co.fecha, co.cantidad,
+       p.precio * co.cantidad <span class="kw">AS</span> total
+<span class="kw">FROM</span> compras co
+<span class="kw">JOIN</span> clientes c  <span class="kw">ON</span> c.dni    = co.cliente_dni
+<span class="kw">JOIN</span> productos p <span class="kw">ON</span> p.codigo = co.producto_codigo
+<span class="kw">ORDER BY</span> co.fecha <span class="kw">DESC</span>;
+
+<span class="cm">-- LEFT JOIN: clientes aunque no hayan comprado</span>
+<span class="kw">SELECT</span> c.nombre, co.id_compra
+<span class="kw">FROM</span> clientes c
+<span class="kw">LEFT JOIN</span> compras co <span class="kw">ON</span> co.cliente_dni = c.dni;
+
+<span class="cm">-- FULL OUTER simulado en MySQL</span>
+<span class="kw">SELECT</span> c.nombre, co.id_compra <span class="kw">FROM</span> clientes c
+<span class="kw">LEFT JOIN</span> compras co <span class="kw">ON</span> co.cliente_dni = c.dni
+<span class="kw">UNION</span>
+<span class="kw">SELECT</span> c.nombre, co.id_compra <span class="kw">FROM</span> clientes c
+<span class="kw">RIGHT JOIN</span> compras co <span class="kw">ON</span> co.cliente_dni = c.dni;</pre>
+
+  <p><strong>Subconsultas.</strong> Es un <code>SELECT</code> dentro de otro.
+  Sirve para filtros complejos sin armar la consulta en dos pasos:</p>
+<pre class="codigo"><span class="kw">SELECT</span> nombre
+<span class="kw">FROM</span> clientes
+<span class="kw">WHERE</span> dni <span class="kw">IN</span> (
+    <span class="kw">SELECT</span> cliente_dni <span class="kw">FROM</span> compras <span class="kw">WHERE</span> cantidad &gt;= 2
+);
+
+<span class="cm">-- Subconsulta como columna calculada</span>
+<span class="kw">SELECT</span> c.nombre,
+       (<span class="kw">SELECT</span> <span class="kw">COUNT</span>(*) <span class="kw">FROM</span> compras co <span class="kw">WHERE</span> co.cliente_dni = c.dni) <span class="kw">AS</span> compras
+<span class="kw">FROM</span> clientes c;</pre>
+
+  <p><strong>Uniones verticales.</strong> <code>UNION</code> y
+  <code>UNION ALL</code> juntan filas de dos consultas con la misma cantidad
+  de columnas y tipos compatibles. <code>UNION</code> elimina duplicados;
+  <code>UNION ALL</code> los conserva:</p>
+<pre class="codigo"><span class="kw">SELECT</span> nombre <span class="kw">AS</span> valor <span class="kw">FROM</span> clientes
+<span class="kw">UNION</span>
+<span class="kw">SELECT</span> nombre <span class="kw">AS</span> valor <span class="kw">FROM</span> productos;</pre>
+
+  <div class="nota"><strong>Para probar:</strong> pegá todo el script en
+  phpMyAdmin o MySQL Workbench. Si insertás una compra con un
+  <code>cliente_dni</code> inexistente, la <code>FOREIGN KEY</code> debe
+  rechazarla: eso confirma que la relación está funcionando.</div>
 </section>
 <!-- ======================= ACTIVIDADES ======================== -->
 <section id="actividades">
